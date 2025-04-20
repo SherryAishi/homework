@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>短视频用户行为漏斗图</title>
+  <style>
+    /* 整体容器样式 */
+    #chart-container {
+      display: flex;
+      width: 800px;
+      margin: 0 auto;
+    }
+
+    /* 漏斗图样式 */
+    #funnel-chart {
+      width: 60%;
+      position: relative;
+    }
+
+    /* 漏斗层级样式 */
+   .funnel-level {
+      background-color: #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    /* 展开的流失用户路径样式 */
+   .expanded {
+      display: none;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    /* 柱状图样式 */
+    #bar-chart {
+      width: 40%;
+    }
+
+    /* 柱状图柱子样式 */
+   .bar {
+      fill: #007bff;
+    }
+
+    /* 转化率提示框样式 */
+   .tooltip {
+      position: absolute;
+      background-color: white;
+      border: 1px solid #ccc;
+      padding: 5px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="chart-container">
+    <!-- 漏斗图 -->
+    <div id="funnel-chart">
+      <div class="funnel-level" data-type="搞笑" data-conversion-rate="0.8" data-users="1000">曝光</div>
+      <div class="expanded">流失用户路径：曝光 -> 点击（流失）</div>
+      <div class="funnel-level" data-type="美食" data-conversion-rate="0.6" data-users="800">点击</div>
+      <div class="expanded">流失用户路径：点击 -> 播放（流失）</div>
+      <div class="funnel-level" data-type="教育" data-conversion-rate="0.5" data-users="480">播放</div>
+      <div class="expanded">流失用户路径：播放 -> 点赞（流失）</div>
+      <div class="funnel-level" data-type="搞笑" data-conversion-rate="0.4" data-users="240">点赞</div>
+      <div class="expanded">流失用户路径：点赞 -> 评论（流失）</div>
+      <div class="funnel-level" data-type="美食" data-conversion-rate="0.3" data-users="96">评论</div>
+      <div class="expanded">流失用户路径：评论 -> 分享（流失）</div>
+      <div class="funnel-level" data-type="教育" data-conversion-rate="0.2" data-users="29">分享</div>
+    </div>
+    <!-- 柱状图 -->
+    <div id="bar-chart">
+      <svg width="300" height="400">
+        <rect x="50" y="300" width="30" height="50" class="bar"></rect>
+        <rect x="50" y="250" width="30" height="40" class="bar"></rect>
+        <rect x="50" y="200" width="30" height="30" class="bar"></rect>
+        <rect x="50" y="150" width="30" height="20" class="bar"></rect>
+        <rect x="50" y="100" width="30" height="10" class="bar"></rect>
+        <rect x="50" y="50" width="30" height="5" class="bar"></rect>
+      </svg>
+    </div>
+  </div>
+
+  <script>
+    // 获取所有漏斗层级元素
+    const funnelLevels = document.querySelectorAll('.funnel-level');
+    const expandedDivs = document.querySelectorAll('.expanded');
+
+    // 为每个漏斗层级添加点击事件
+    funnelLevels.forEach((level, index) => {
+      level.addEventListener('click', () => {
+        const expandedDiv = expandedDivs[index];
+        expandedDiv.style.display = expandedDiv.style.display === 'none'? 'block' : 'none';
+      });
+
+      // 为每个漏斗层级添加鼠标悬停事件
+      level.addEventListener('mouseenter', () => {
+        const conversionRate = level.getAttribute('data-conversion-rate');
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.textContent = `转化率: ${(conversionRate * 100).toFixed(2)}%`;
+        const rect = level.getBoundingClientRect();
+        tooltip.style.left = rect.right + 'px';
+        tooltip.style.top = rect.top + 'px';
+        document.body.appendChild(tooltip);
+      });
+
+      // 为每个漏斗层级添加鼠标移出事件
+      level.addEventListener('mouseleave', () => {
+        const tooltip = document.querySelector('.tooltip');
+        if (tooltip) {
+          document.body.removeChild(tooltip);
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

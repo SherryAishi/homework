@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>短视频用户行为漏斗图</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <style>
+        #chart {
+            width: 100%;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chart"></div>
+    <script>
+        // 初始化图表
+        const chart = echarts.init(document.getElementById('chart'));
+
+        // 模拟数据
+        const data = {
+            layers: ['曝光', '点击', '播放', '点赞', '评论', '分享'],
+            values: [1000, 800, 700, 500, 300, 200], // 每层用户数量
+            durations: [10, 20, 30, 40, 50, 60], // 每层停留时长（单位：秒）
+            contentTypes: ['搞笑', '美食', '教育'], // 内容类型
+            colorMap: {
+                '搞笑': '#FFD700',
+                '美食': '#FF6347',
+                '教育': '#4682B4'
+            },
+            lossPaths: {
+                '曝光': ['未点击', '未播放'],
+                '点击': ['未播放', '未点赞'],
+                '播放': ['未点赞', '未评论'],
+                '点赞': ['未评论', '未分享'],
+                '评论': ['未分享']
+            }
+        };
+
+        // 计算转化率
+        const conversionRates = data.values.map((value, index) => {
+            if (index === 0) return '100%'; // 第一层曝光转化率是100%
+            return `${((value / data.values[index - 1]) * 100).toFixed(2)}%`;
+        });
+
+        // 配置图表
+        const option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: (params) => {
+                    const layer = params.name;
+                    const rate = conversionRates[params.dataIndex];
+                    return `${layer}<br/>转化率: ${rate}`;
+                }
+            },
+            legend: {
+                data: data.contentTypes,
+                orient: 'vertical',
+                right: 10,
+                top: 'center'
+            },
+            series: [
+                {
+                    name: '漏斗图',
+                    type: 'funnel',
+                    left: '10%',
+                    top: 60,
+                    x2: 80,
+                    bottom: 60,
+                    width: '80%',
+                    min: 0,
+                    max: 1000,
+                    minSize: '0%',
+                    maxSize: '100%',
+                    sort: 'descending',
+                    gap: 2,
+                    label: {
+                        show: true,
+                        position: 'inside'
+                    },
+                    labelLine: {
+                        length: 10,
+                        lineStyle: {
+                            width: 1,
+                            type: 'solid'
+                        }
+                    },
+                    itemStyle: {
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    },
+                    emphasis: {
+                        label: {
+                            fontSize: 20
+                        }
+                    },
+                    data: data.layers.map((layer, index) => ({
+                        name: layer,
+                        value: data.values[index],
+                        itemStyle: {
+                            color: data.colorMap[data.contentTypes[index % data.contentTypes.length]]
+                        }
+                    })),
+                    click: function (params) {
+                        alert(`展开查看 ${params.name} 的流失用户行为路径: ${data.lossPaths[params.name].join(', ')}`);
+                    }
+                },
+                {
+                    name: '停留时长',
+                    type: 'bar',
+                    barWidth: '40%',
+                    data: data.durations,
+                    yAxisIndex: 1,
+                    label: {
+                        show: true,
+                        position: 'top'
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'category',
+                    position: 'left',
+                    data: data.layers
+                },
+                {
+                    type: 'value',
+                    position: 'right',
+                    axisLabel: {
+                        formatter: '{value} 秒'
+                    }
+                }
+            ],
+            xAxis: [
+                {
+                    type: 'value',
+                    position: 'top',
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                }
+            ]
+        };
+
+        // 渲染图表
+        chart.setOption(option);
+    </script>
+</body>
+</html>

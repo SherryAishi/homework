@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>短视频用户行为漏斗图</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 添加漏斗图插件 -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-funnel@2.0.0/dist/chartjs-chart-funnel.min.js"></script>
+    <style>
+        .container {
+            display: flex;
+            width: 1000px;
+            margin: 20px auto;
+        }
+        #funnelChart {
+            width: 60% !important;
+            height: 500px !important;
+        }
+        #barChart {
+            width: 40% !important;
+            height: 500px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="funnelChart"></canvas>
+        <canvas id="barChart"></canvas>
+    </div>
+
+    <script>
+        // 漏斗图数据
+        const funnelData = {
+            labels: ['曝光', '点击', '播放', '点赞', '评论', '分享'],
+            datasets: [{
+                label: '搞笑',
+                data: [10000, 7000, 5000, 3000, 1500, 800],
+                backgroundColor: '#FF6384',
+                borderColor: '#FF6384'
+            }, {
+                label: '美食',
+                data: [8000, 6000, 4500, 2800, 1400, 700],
+                backgroundColor: '#36A2EB',
+                borderColor: '#36A2EB'
+            }, {
+                label: '教育',
+                data: [12000, 8500, 6000, 3500, 1800, 900],
+                backgroundColor: '#FFCE56',
+                borderColor: '#FFCE56'
+            }]
+        };
+
+        // 停留时长数据 (单位：秒)
+        const durationData = {
+            labels: ['曝光', '点击', '播放', '点赞', '评论', '分享'],
+            datasets: [{
+                label: '平均停留时长',
+                data: [2, 5, 30, 10, 15, 20],
+                backgroundColor: '#4BC0C0'
+            }]
+        };
+
+        // 流失路径数据
+        const dropoutPaths = {
+            '曝光→点击': '30%跳转离开, 20%关闭页面',
+            '点击→播放': '20%加载失败, 10%返回',
+            '播放→点赞': '40%观看完成离开',
+            '点赞→评论': '50%无进一步互动',
+            '评论→分享': '60%完成路径'
+        };
+
+        // 漏斗图配置
+        const funnelConfig = {
+            type: 'funnel',
+            data: funnelData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const currentValue = context.parsed;
+                                const previousValue = context.dataIndex === 0 ? 
+                                    currentValue : 
+                                    funnelData.datasets[context.datasetIndex].data[context.dataIndex - 1];
+                                const conversionRate = ((currentValue / previousValue) * 100).toFixed(1);
+                                return `${context.dataset.label}: ${currentValue} (转化率: ${conversionRate}%)`;
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'top'
+                    }
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const element = elements[0];
+                        const fromLabel = funnelData.labels[element.index];
+                        const toLabel = funnelData.labels[element.index + 1];
+                        if (toLabel) {
+                            const pathKey = `${fromLabel}→${toLabel}`;
+                            alert(`流失路径分析 (${pathKey}):\n${dropoutPaths[pathKey] || '暂无详细数据'}`);
+                        }
+                    }
+                }
+            }
+        };
+
+        // 柱状图配置
+        const barConfig = {
+            type: 'bar',
+            data: durationData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '停留时长 (秒)'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '各层级平均停留时长'
+                    }
+                }
+            }
+        };
+
+        // 创建图表
+        new Chart(document.getElementById('funnelChart'), funnelConfig);
+        new Chart(document.getElementById('barChart'), barConfig);
+    </script>
+</body>
+</html>

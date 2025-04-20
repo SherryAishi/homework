@@ -1,0 +1,238 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雄狮少年2</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/d3-cloud@1.2.5/build/d3.layout.cloud.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: 100%;
+            background-color: beige;
+        }
+
+        #leftside {
+            width: 20%;
+            height: 1100px;
+            background-color: rgba(174, 198, 207, 0.954);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+
+        }
+
+        #movie_div {
+            width: 80%;
+            height: 350px;
+            text-align: center;
+            backface-visibility: visible;
+            background-color: antiquewhite;
+        }
+
+        #movie_image {
+            padding-top: 10px;
+            width: 90%;
+            height: 85%;
+        }
+
+        #content_container {
+            padding-left: 5%;
+            width: 75%;
+            background-color: beige;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #content {
+            display: flex;
+            flex-direction: row;
+            padding-left: 10px;
+        }
+
+        #chart_cloud{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        #chart_div {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+        }
+
+        #slider {
+            width: 600px;
+            height: 20px;
+        }
+
+        #chart {
+            width: 1000px;
+            height: 700px;
+            display: flex;
+            justify-content: center;
+            /* align-items: center; */
+        }
+
+        .line {
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            shape-rendering: crispEdges;
+        }
+
+        .axis text {
+            font-size: 12px;
+        }
+
+        .comment-circle {
+            fill: green;
+            stroke: black;
+            stroke-width: 1;
+        }
+
+        #word-cloud {
+            width: 600px;
+            height: 700px;
+            background: linear-gradient(135deg, #f7f7f7, #ffffff);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #comment-display {
+            width: 300px;
+            max-height: 600px;
+            padding: 15px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            overflow-y: auto;
+        }
+
+        h3 {
+            margin: 0 0 10px;
+            color: #333;
+        }
+
+        p {
+            color: #555;
+        }
+
+        .tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px;
+            border-radius: 4px;
+            display: none;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 100;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="leftside">
+
+        <div id="movie_div">
+            <img id="movie_image" src="assets/p2915745470.webp" alt="雄狮少年2">
+            <p>
+                <a href="son3.html" target="_blank" style="color: black;text-decoration: none;">
+                    前往：雄狮少年2
+                </a>
+            </p>
+        </div>
+        
+        <div id="movie_div">
+            <img id="movie_image" src="assets/p2892002091.webp" alt="孤星计划">
+            <p>
+                <a href="son1.html" target="_blank" style="color: black;text-decoration: none;">
+                    前往：孤星计划
+                </a>
+            </p>
+        </div>
+
+        <div id="movie_div">
+            <img id="movie_image" src="assets/p2915454411.webp" alt="好东西">
+            <p>
+                <a href="son2.html" target="_blank" style="color: black;text-decoration: none;">
+                    前往：好东西
+                </a>
+            </p>
+        </div>
+
+    </div>
+
+    <div id="content_container">
+
+        <div id="content">
+            <img src="assets/p2915745470.webp" alt="好运来" style="height: 620px;width: 500px;padding-right: 25px;">
+            <div style="padding-right: 15px;">
+                <h1>雄狮少年2</h1>
+                <p>导演: 孙海鹏</p>
+                <p>主演: 李昕 / 郭皓 / 陈业雄 / 蔡欣然 / 王一郎 </p>
+                <p>类型: 喜剧 / 动作 / 动画</p>
+                <p>制片国家/地区: 中国大陆</p>
+                <p>语言: 汉语普通话</p>
+                <h2>评价：</h2>
+                <p>"这哪是动画片啊,明明就是真人功夫片,真正意义上的国产成人动画！动作戏与渲染超一流,质感真实得可怕,这怎能是国漫的技术力,不敢信啊"</p>
+                <p>"听懂了最后一句“交给时间吧,我相信清者自清”才能理解这部电影的难能可贵。这个世界有时候并不公平,感谢还有这些理想主义者。"</p>
+                <p>"中规中矩,退步最大的是配乐,第一部选的几首歌适配度太好了,我至今还记得当年九连的莫欺少年穷响起来时浑身起鸡皮疙瘩。这一部中间两次rap观感真是乱七八糟,不仅审美降级,和片子的气质也完全不符。"</p>
+                <p>"舞狮始于少年的偶然,是梦的开始；格斗则是命运的必然,残梦的延续。当主角们被造谣污蔑的声音击垮吞没,我们被再次打回现实,原来并没有什么具体的敌人,只有一种坚固的、狭窄的、随处可见又无力回击的处境。来到高潮戏,当幻觉重现,写实的招式变得更加写意,我们得以看到属于电影的真理：在现实的泥土与砖瓦上造梦,在梦的倒影中看见现实。"</p>
+            </div>
+        </div>
+
+
+
+        <div id="chart_div">
+            <h2>上映后好评数</h2>
+            <div id="chart"></div>
+
+            <div>
+                <input type="range" id="slider" min="0" max="80" step="10" value="0" style="width: 400px;">
+            </div>
+            <div id="chart_cloud">
+
+                <div id="word-cloud"></div>
+                <div id="comment-display"></div>
+                <div class="tooltip" id="tooltip"></div>
+                <!-- <script src="son03_renderChart2.js"></script> -->
+            </div>
+
+            <h2>上映后票房以及评论数</h2>
+            <div id="chart1"></div>
+            <script type="module" src="main03.js"></script>
+
+        </div>
+
+
+
+    </div>
+</body>
+
+</html>

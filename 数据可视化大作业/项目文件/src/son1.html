@@ -1,0 +1,246 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>孤星计划</title>
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/d3-cloud@1.2.5/build/d3.layout.cloud.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: 100%;
+            background-color: beige;
+        }
+
+        #leftside {
+            width: 20%;
+            height: 1100px;
+            background-color: rgba(174, 198, 207, 0.954);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+
+        }
+
+        #movie_div {
+            width: 80%;
+            height: 350px;
+            text-align: center;
+            backface-visibility: visible;
+            background-color: antiquewhite;
+        }
+
+        #movie_image {
+            padding-top: 10px;
+            width: 90%;
+            height: 85%;
+        }
+
+        #content_container {
+            padding-left: 5%;
+            width: 75%;
+            background-color: beige;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #content {
+            display: flex;
+            flex-direction: row;
+            padding-left: 10px;
+        }
+
+        #chart_cloud{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        #chart_div {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+        }
+
+        #slider {
+            width: 600px;
+            height: 20px;
+        }
+
+        #chart {
+            width: 1000px;
+            height: 700px;
+            display: flex;
+            justify-content: center;
+            /* align-items: center; */
+        }
+
+        .line {
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            shape-rendering: crispEdges;
+        }
+
+        .axis text {
+            font-size: 12px;
+        }
+
+        .comment-circle {
+            fill: green;
+            stroke: black;
+            stroke-width: 1;
+        }
+
+        #word-cloud {
+            width: 600px;
+            height: 700px;
+            background: linear-gradient(135deg, #f7f7f7, #ffffff);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #comment-display {
+            width: 300px;
+            max-height: 600px;
+            padding: 15px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            overflow-y: auto;
+        }
+
+        h3 {
+            margin: 0 0 10px;
+            color: #333;
+        }
+
+        p {
+            color: #555;
+        }
+
+        .tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px;
+            border-radius: 4px;
+            display: none;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 100;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="leftside">
+        <div id="movie_div">
+            <img id="movie_image" src="assets/p2892002091.webp" alt="孤星计划">
+            <p>
+                <a href="son1.html" target="_blank" style="color: black;text-decoration: none;">
+                    前往：孤星计划
+                </a>
+            </p>
+        </div>
+
+        <div id="movie_div">
+            <img id="movie_image" src="assets/p2915454411.webp" alt="好东西">
+            <p>
+                <a href="son2.html" target="_blank" style="color: black;text-decoration: none;">
+                    前往：好东西
+                </a>
+            </p>
+        </div>  
+
+        <div id="movie_div">
+            <img id="movie_image" src="assets/p2915745470.webp" alt="雄狮少年2">
+            <p>
+                <a href="son3.html" target="_blank" style="color: black;text-decoration: none;">
+                    前往：雄狮少年2
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <div id="content_container">
+
+        <div id="content">
+            <img src="assets/p2892002091.webp" alt="完美的日子" style="height: 620px;width: 500px;padding-right: 25px;">
+            <div style="padding-right: 15px;">
+                <h1>孤星计划</h1>
+                <p>导演: 徐展雄</p>
+                <p>主演: 王源 / 张雪迎 / 梁靖康 / 李晨 / 印小天 / 韩童生 / 余皑磊 / 董勇 / 此沙 / 翟潇闻 </p>
+                <p>类型: 剧情/悬疑</p>
+                <p>制片国家/地区: 中国大陆</p>
+                <p>语言: 汉语普通话</p>
+                <h2>评价：</h2>
+                <p>"内地版的《十月围城》,但是结构不够好,前半段都在铺垫,真正护送胡先生就是快结尾的地方,没有从一开始就交代。前面的悬念就是梁靖康这个角色到底是不是好人～张雪迎这个角色死亡的时候是中点,所有好坏角色都重新洗牌,但是也没有做清楚,整体结构不够干脆。"
+                </p>
+                <p>"郊外神枪手、学校抗敌（这场戏太假了）,酒吧醉鬼,电影院现身商量计划（会不会有点妨碍他人观影）,码头狙人。以上是看这部电影的原因。余恺磊是本片唯一有演技的演员,其他人嘛…"
+                </p>
+                <p>"此时正在电影院 刚看完 眼泪都还没干 孤星计划真的很好看！节奏很好 反转很精彩 角色和剧情设定都很有戏剧张力 王源演技特别让人惊喜很有灵气 从去年在央一看他演的追光的日子就感觉到了他演技很自然 这次他唱的片尾曲也很好听"
+                </p>
+                <p>"虽然比较刻意和生硬,反转也显得牵强,不过大时代的青春+动作+革命题材还是有些看点的。"
+                </p>
+            </div>
+        </div>
+
+ 
+        <div id="chart_div">
+            <h2>上映后好评数</h2>
+            <div id="chart"></div>
+
+            <div>
+                <input type="range" id="slider" min="0" max="80" step="10" value="0" style="width: 400px;">
+            </div>
+
+
+            <div id="chart_cloud">
+
+                <div id="word-cloud"></div>
+                <div id="comment-display"></div>
+                <div class="tooltip" id="tooltip"></div>
+                <!-- <script src="son01_renderChart2.js"></script> -->
+            </div>
+
+            <h2>上映后票房以及评论数</h2>
+            <div id="chart1"></div>
+            <script type="module" src="main01.js"></script>
+
+        </div>
+
+
+
+
+
+
+
+    </div>
+</body>
+
+</html>

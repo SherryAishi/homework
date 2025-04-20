@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>短视频用户行为漏斗图</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .funnel rect { cursor: pointer; }
+        .bar { fill-opacity: 0.7; }
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 12px;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<h2>短视频用户行为漏斗图</h2>
+<svg id="funnelChart" width="600" height="500"></svg>
+<svg id="barChart" width="300" height="500"></svg>
+<div id="tooltip" class="tooltip"></div>
+
+<script>
+// 漏斗数据
+const funnelData = [
+    { stage: "曝光", users: 10000, dropOff: 0, type: "搞笑" },
+    { stage: "点击", users: 6000, dropOff: 4000, type: "搞笑" },
+    { stage: "播放", users: 4500, dropOff: 1500, type: "搞笑" },
+    { stage: "点赞", users: 2500, dropOff: 2000, type: "搞笑" },
+    { stage: "评论", users: 1200, dropOff: 1300, type: "搞笑" },
+    { stage: "分享", users: 500, dropOff: 700, type: "搞笑" }
+];
+
+// 颜色映射（不同内容类型）
+const colorMap = { "搞笑": "#ff7f0e", "美食": "#2ca02c", "教育": "#1f77b4" };
+
+// SVG 画布
+const svg = d3.select("#funnelChart");
+const width = 600, height = 500;
+const funnelWidth = 300, funnelHeight = 400;
+
+// 绘制漏斗图
+const funnel = svg.append("g").attr("class", "funnel")
+    .attr("transform", `translate(${width / 4}, 50)`);
+
+const yScale = d3.scaleLinear().domain([0, funnelData.length]).range([0, funnelHeight]);
+
+funnel.selectAll("rect")
+    .data(funnelData)
+    .enter().append("rect")
+    .attr("x", (d, i) => i * 10)
+    .attr("y", (d, i) => yScale(i))
+    .attr("width", (d, i) => funnelWidth - i * 40)
+    .attr("height", 50)
+    .attr("fill", d => colorMap[d.type])
+    .attr("stroke", "black")
+    .on("mouseover", function (event, d) {
+        d3.select("#tooltip")
+            .style("visibility", "visible")
+            .html(`转化率: ${(d.users / funnelData[0].users * 100).toFixed(2)}%`)
+            .style("left", event.pageX + "px")
+            .style("top", event.pageY - 30 + "px");
+    })
+    .on("mouseout", () => d3.select("#tooltip").style("visibility", "hidden"))
+    .on("click", function (event, d) {
+        alert(`${d.stage} 层流失用户路径：观看其他视频、退出应用、查看评论等`);
+    });
+
+// 绘制柱状图（停留时长）
+const barSvg = d3.select("#barChart").attr("transform", `translate(0,50)`);
+const barScale = d3.scaleLinear().domain([0, 100]).range([0, 200]);
+
+const durationData = [
+    { stage: "曝光", time: 5 },
+    { stage: "点击", time: 15 },
+    { stage: "播放", time: 30 },
+    { stage: "点赞", time: 10 },
+    { stage: "评论", time: 20 },
+    { stage: "分享", time: 25 }
+];
+
+barSvg.selectAll("rect")
+    .data(durationData)
+    .enter().append("rect")
+    .attr("x", 50)
+    .attr("y", (d, i) => yScale(i))
+    .attr("width", d => barScale(d.time))
+    .attr("height", 50)
+    .attr("fill", "#69b3a2");
+
+barSvg.selectAll("text")
+    .data(durationData)
+    .enter().append("text")
+    .attr("x", d => barScale(d.time) + 60)
+    .attr("y", (d, i) => yScale(i) + 30)
+    .text(d => `${d.time}s`)
+    .attr("fill", "black");
+
+</script>
+</body>
+</html>

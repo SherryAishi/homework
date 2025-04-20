@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雷达图示例</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .container {
+            display: flex;
+            align-items: center;
+        }
+        .text-box {
+            margin-right: 20px;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="text-box">
+            <p>deepseek: 68.67</p>
+            <p>chatgpt: 73</p>
+            <p>kimi: 40.33</p>
+            <p>grok3: 75</p>
+            <p>doubao: 54.33</p>
+        </div>
+        <div>
+            <canvas id="radarChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        const radarChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['deepseek', 'chatgpt', 'kimi', 'grok3', 'doubao'],
+                datasets: [{
+                    label: '属性值',
+                    data: [68.67, 73, 40.33, 75, 54.33],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scale: {
+                    ticks: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

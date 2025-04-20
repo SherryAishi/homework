@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>短视频用户行为漏斗图</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        .funnel-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .funnel {
+            width: 60%;
+        }
+        .bar-chart {
+            width: 35%;
+        }
+        .funnel-step {
+            cursor: pointer;
+        }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: 120px;
+            height: auto;
+            padding: 5px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="funnel-container">
+        <div class="funnel"></div>
+        <div class="bar-chart"></div>
+    </div>
+
+    <script>
+        // 数据
+        const data = {
+            steps: ["曝光", "点击", "播放", "点赞", "评论", "分享"],
+            values: [10000, 8000, 6000, 4000, 2000, 1000],
+            colors: ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"],
+            contentTypes: ["搞笑", "美食", "教育"],
+            durations: [10, 20, 30, 40, 50, 60] // 各层级用户停留时长
+        };
+
+        // 绘制漏斗图
+        const funnelContainer = d3.select(".funnel");
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        const funnel = funnelContainer.selectAll(".funnel-step")
+            .data(data.steps)
+            .enter()
+            .append("div")
+            .attr("class", "funnel-step")
+            .style("width", (d, i) => `${data.values[i] / 100}px`)
+            .style("height", "40px")
+            .style("background-color", (d, i) => data.colors[i])
+            .style("margin", "10px auto")
+            .style("position", "relative")
+            .on("click", (event, d) => {
+                alert(`查看 ${d} 的流失用户行为路径`);
+            })
+            .on("mouseover", (event, d, i) => {
+                const conversionRate = (data.values[i] / data.values[0]) * 100;
+                tooltip.transition().duration(200).style("opacity", .9);
+                tooltip.html(`转化率: ${conversionRate.toFixed(2)}%`)
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", () => {
+                tooltip.transition().duration(500).style("opacity", 0);
+            });
+
+        // 绘制柱状图
+        const barChartData = [{
+            x: data.steps,
+            y: data.durations,
+            type: 'bar',
+            marker: {
+                color: data.colors
+            }
+        }];
+
+        const barChartLayout = {
+            title: '各层级用户停留时长',
+            xaxis: { title: '漏斗层级' },
+            yaxis: { title: '停留时长 (秒)' }
+        };
+
+        Plotly.newPlot('.bar-chart', barChartData, barChartLayout);
+    </script>
+</body>
+</html>
